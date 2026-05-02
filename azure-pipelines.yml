@@ -1,0 +1,22 @@
+trigger:
+- main
+
+pool:
+  name: VENKAT   # your self-hosted agent
+
+steps:
+
+# Authenticate to Azure Artifacts
+- task: MavenAuthenticate@0
+  inputs:
+    artifactsFeeds: 'maven-feed'
+
+# Build and publish WAR
+- task: Maven@3
+  displayName: Build and Deploy WAR
+  inputs:
+    mavenPOMFile: 'pom.xml'
+    goals: 'clean deploy'
+    options: '-DskipTests'
+    javaHomeOption: 'Path'
+    jdkDirectory: 'C:\\jdk8'   # UPDATE THIS
