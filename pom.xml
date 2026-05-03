@@ -65,7 +65,7 @@
     <distributionManagement>
         <repository>
             <id>azure-artifacts</id>
-            <url>https://pkgs.dev.azure.com/<ORG>/<PROJECT>/_packaging/maven-feed/maven/v1</url>
+            <url>https://pkgs.dev.azure.com/wy220506/wy220506/_packaging/maven-feed/maven/v1</url>
         </repository>
     </distributionManagement>
 
