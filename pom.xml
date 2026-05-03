@@ -64,7 +64,7 @@
     <!-- 🔥 Azure Artifacts Configuration -->
     <distributionManagement>
         <repository>
-            <id>azure-artifacts</id>
+            <id>springboot-azure-artifacts</id>
             <url>https://pkgs.dev.azure.com/wy220506/wy220506/_packaging/maven-feed/maven/v1</url>
         </repository>
     </distributionManagement>
