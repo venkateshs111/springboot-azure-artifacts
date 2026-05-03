@@ -11,12 +11,18 @@ steps:
   inputs:
     artifactsFeeds: 'maven-feed'
 
+# 🔍 DEBUG (IMPORTANT - keep temporarily)
+- powershell: |
+    Write-Host "Agent Temp Directory: $(Agent.TempDirectory)"
+    Get-ChildItem -Path $(Agent.TempDirectory)
+  displayName: Check settings.xml
+
 # Build and publish WAR
 - task: Maven@3
   displayName: Build and Deploy WAR
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'clean deploy'
-    options: '-DskipTests'
+    options: '-s $(Agent.TempDirectory)/settings.xml -DskipTests'
     javaHomeOption: 'Path'
-    jdkDirectory: 'C:\\jdk8'   # UPDATE THIS
+    jdkDirectory: 'C:\\jdk8'
