@@ -6,10 +6,15 @@ pool:
 
 stages:
 
+# ========================
+# 1. BUILD STAGE
+# ========================
 - stage: Build
+  displayName: Build WAR
   jobs:
   - job: BuildJob
     steps:
+
     - task: MavenAuthenticate@0
       inputs:
         artifactsFeeds: 'maven-feed'
@@ -23,15 +28,35 @@ stages:
         javaHomeOption: 'Path'
         jdkDirectory: 'C:\jdk8'
 
+    # Publish WAR as pipeline artifact
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/target'
+        artifactName: 'war-artifact'
+
+
+# ========================
+# 2. DEPLOY STAGE
+# ========================
 - stage: Deploy
+  displayName: Deploy to Azure Artifacts
   dependsOn: Build
+
   jobs:
   - job: DeployJob
     steps:
+
+    # Download artifact from Build stage
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: 'war-artifact'
+        path: '$(Pipeline.Workspace)'
+
     - task: MavenAuthenticate@0
       inputs:
         artifactsFeeds: 'maven-feed'
 
+    # Deploy ONLY (no rebuild)
     - task: Maven@3
       displayName: Deploy WAR to Azure Artifacts
       inputs:
