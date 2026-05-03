@@ -2,27 +2,19 @@ trigger:
 - main
 
 pool:
-  name: Default   # your self-hosted agent
+  name: Default
 
 steps:
 
-# Authenticate to Azure Artifacts
 - task: MavenAuthenticate@0
   inputs:
     artifactsFeeds: 'maven-feed'
 
-# 🔍 DEBUG (IMPORTANT - keep temporarily)
-- powershell: |
-    Write-Host "Agent Temp Directory: $(Agent.TempDirectory)"
-    Get-ChildItem -Path $(Agent.TempDirectory)
-  displayName: Check settings.xml
-
-# Build and publish WAR
 - task: Maven@3
   displayName: Build and Deploy WAR
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'clean deploy'
-    options: '-s $(Agent.TempDirectory)/settings.xml -DskipTests'
+    options: '-DskipTests'
     javaHomeOption: 'Path'
-    jdkDirectory: 'C:\\jdk8'
+    jdkDirectory: 'C:\jdk8'
