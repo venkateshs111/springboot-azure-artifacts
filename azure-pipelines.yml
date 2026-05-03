@@ -4,17 +4,39 @@ trigger:
 pool:
   name: Default
 
-steps:
+stages:
 
-- task: MavenAuthenticate@0
-  inputs:
-    artifactsFeeds: 'maven-feed'
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'maven-feed'
 
-- task: Maven@3
-  displayName: Build and Deploy WAR
-  inputs:
-    mavenPOMFile: 'pom.xml'
-    goals: 'clean deploy'
-    options: '-DskipTests'
-    javaHomeOption: 'Path'
-    jdkDirectory: 'C:\jdk8'
+    - task: Maven@3
+      displayName: Build WAR
+      inputs:
+        mavenPOMFile: 'pom.xml'
+        goals: 'clean package'
+        options: '-DskipTests'
+        javaHomeOption: 'Path'
+        jdkDirectory: 'C:\jdk8'
+
+- stage: Deploy
+  dependsOn: Build
+  jobs:
+  - job: DeployJob
+    steps:
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'maven-feed'
+
+    - task: Maven@3
+      displayName: Deploy WAR to Azure Artifacts
+      inputs:
+        mavenPOMFile: 'pom.xml'
+        goals: 'deploy'
+        options: '-DskipTests'
+        javaHomeOption: 'Path'
+        jdkDirectory: 'C:\jdk8'
