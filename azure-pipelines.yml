@@ -17,6 +17,6 @@ steps:
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'clean deploy'
-    options: '-s $(Agent.TempDirectory)/settings.xml'
+    options: '-DskipTests'
     javaHomeOption: 'Path'
     jdkDirectory: 'C:\\jdk8'   # UPDATE THIS
