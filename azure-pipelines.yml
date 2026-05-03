@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: VENKAT   # your self-hosted agent
+  name: Default   # your self-hosted agent
 
 steps:
 
